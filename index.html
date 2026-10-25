@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Финансовый дашборд для управления доходами и расходами">
+    <title>Moneta Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="#">
+                <span class="brand-mark">♦</span>
+                <span>Moneta<sup>™</sup></span>
+            </a>
+
+            <p class="sidebar-label">МЕНЮ</p>
+            <nav class="navigation">
+                <button class="nav-link active" data-view="dashboard">▦ Dashboard</button>
+                <button class="nav-link" data-view="analytics">⌁ Analytics</button>
+                <button class="nav-link" data-view="wallet">▣ My Wallet</button>
+            </nav>
+
+            <p class="sidebar-label tools-label">ИНСТРУМЕНТЫ</p>
+            <nav class="navigation">
+                <button class="nav-link" data-view="transactions">⇄ Transactions</button>
+                <button class="nav-link" data-view="settings">⚙ Settings</button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="upgrade-card">
+                    <div class="upgrade-symbol">✦</div>
+                    <strong>Управляй деньгами проще</strong>
+                    <p>Доходы и расходы в одном месте.</p>
+                    <button class="upgrade-button" id="quickAddButton">+ Добавить операцию</button>
+                </div>
+
+                <div class="profile">
+                    <span class="avatar">BA</span>
+                    <div class="profile-info">
+                        <strong>Back Ali</strong>
+                        <small>Личный аккаунт</small>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="icon-button mobile-menu" id="mobileMenuButton">☰</button>
+                <div class="breadcrumb">
+                    <span>Workspace</span> /
+                    <strong id="pageTitle">Dashboard</strong>
+                </div>
+                <div class="topbar-actions">
+                    <label class="search-box top-search">
+                        <span>⌕</span>
+                        <input id="globalSearch" type="search" placeholder="Поиск...">
+                    </label>
+                    <button class="icon-button">♧</button>
+                    <span class="avatar top-avatar">BA</span>
+                </div>
+            </header>
+
+            <section class="page-heading">
+                <div>
+                    <p class="eyebrow">ТВОИ ФИНАНСЫ</p>
+                    <h1 id="greeting">Добро пожаловать, Али! <span class="wave">✦</span></h1>
+                    <p class="muted" id="pageSubtitle">Вот что происходит с твоими финансами сегодня.</p>
+                </div>
+                <button class="primary-button" id="addTransactionButton">＋ Добавить операцию</button>
+            </section>
+
+            <section class="summary-grid">
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-icon cyan">↙</span>
+                        <span class="card-menu">···</span>
+                    </div>
+                    <p class="summary-label">Общий баланс</p>
+                    <div class="summary-value" id="balanceValue">₽632 000</div>
+                    <div class="summary-bottom">
+                        <span class="trend positive">↗ 12,8%</span>
+                        <span class="summary-note">к прошлому месяцу</span>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-icon violet">↗</span>
+                        <span class="card-menu">···</span>
+                    </div>
+                    <p class="summary-label">Доходы</p>
+                    <div class="summary-value" id="incomeValue">₽632 000</div>
+                    <div class="summary-bottom">
+                        <span class="trend positive">↗ 8,2%</span>
+                        <span class="summary-note">за этот месяц</span>
+                    </div>
+                    <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-icon pink">↘</span>
+                        <span class="card-menu">···</span>
+                    </div>
+                    <p class="summary-label">Расходы</p>
+                    <div class="summary-value" id="expenseValue">₽184 500</div>
+                    <div class="summary-bottom">
+                        <span class="trend negative">↘ 3,4%</span>
+                        <span class="summary-note">за этот месяц</span>
+                    </div>
+                    <div class="mini-bars expense-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                </article>
+            </section>
+
+            <section class="content-grid">
+                <article class="panel analytics-panel" id="analyticsPanel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Аналитика</h2>
+                            <p class="muted">Динамика доходов и расходов</p>
+                        </div>
+                        <div class="chart-controls">
+                            <div class="legend">
+                                <span><i class="legend-dot income-dot"></i>Доходы</span>
+                                <span><i class="legend-dot expense-dot"></i>Расходы</span>
+                            </div>
+                            <select id="chartPeriod">
+                                <option value="year">2026</option>
+                                <option value="half">Последние 6 мес.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="chart-wrap">
+                        <div class="chart-y-labels">
+                            <span>₽80к</span><span>₽60к</span><span>₽40к</span>
+                            <span>₽20к</span><span>₽0</span>
+                        </div>
+                        <div class="chart-area">
+                            <div class="chart-grid-lines"><i></i><i></i><i></i><i></i><i></i></div>
+                            <svg id="financeChart" viewBox="0 0 700 230" preserveAspectRatio="none"></svg>
+                            <div class="chart-months" id="chartMonths"></div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel activity-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Активность</h2>
+                            <p class="muted">Распределение расходов</p>
+                        </div>
+                    </div>
+
+                    <div class="donut-area">
+                        <div class="donut-chart" id="donutChart">
+                            <div class="donut-center">
+                                <strong id="spendingPercent">75%</strong>
+                                <span>бюджета</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="budget-line">
+                        <span>Использовано бюджета</span>
+                        <strong id="budgetAmount">₽184 500 / ₽250 000</strong>
+                    </div>
+                    <div class="progress-track"><span id="budgetProgress"></span></div>
+
+                    <div class="category-list">
+                        <div class="category-row"><span><i
+                                    class="category-dot purple-dot"></i>Покупки</span><strong>35%</strong></div>
+                        <div class="category-row"><span><i
+                                    class="category-dot cyan-dot"></i>Продукты</span><strong>25%</strong></div>
+                        <div class="category-row"><span><i
+                                    class="category-dot pink-dot"></i>Транспорт</span><strong>15%</strong></div>
+                        <div class="category-row"><span><i
+                                    class="category-dot gray-dot"></i>Другое</span><strong>25%</strong></div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel transactions-panel" id="transactionsPanel">
+                <div class="panel-heading transactions-heading">
+                    <div>
+                        <h2>Последние операции</h2>
+                        <p class="muted">История твоих транзакций</p>
+                    </div>
+                    <div class="transaction-tools">
+                        <label class="search-box transaction-search">
+                            <span>⌕</span>
+                            <input id="transactionSearch" type="search" placeholder="Поиск операций...">
+                        </label>
+                        <select id="typeFilter">
+                            <option value="all">Все операции</option>
+                            <option value="income">Доходы</option>
+                            <option value="expense">Расходы</option>
+                        </select>
+                        <button class="secondary-button" id="exportButton">↧ Экспорт CSV</button>
+                    </div>
+                </div>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ОПЕРАЦИЯ</th>
+                                <th>ДАТА</th>
+                                <th>КАТЕГОРИЯ</th>
+                                <th>СУММА</th>
+                                <th>СТАТУС</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTable"></tbody>
+                    </table>
+                    <div class="empty-state" id="emptyState" hidden>Операции не найдены.</div>
+                </div>
+
+                <div class="table-footer">
+                    <span id="transactionCount">Показано 5 операций</span>
+                    <button class="text-button" data-view="transactions">Все операции →</button>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <span>© 2026 Moneta Dashboard</span>
+                <span>Управляй финансами с удобством ♥</span>
+            </footer>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="transactionModal" hidden>
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-heading">
+                <div>
+                    <p class="eyebrow">НОВАЯ ТРАНЗАКЦИЯ</p>
+                    <h2 id="modalTitle">Добавить операцию</h2>
+                </div>
+                <button class="icon-button" id="closeModalButton" aria-label="Закрыть">×</button>
+            </div>
+
+            <form id="transactionForm">
+                <label class="field-label">Название операции
+                    <input name="title" required maxlength="60" placeholder="Например, Покупка продуктов">
+                </label>
+
+                <div class="form-row">
+                    <label class="field-label">Тип операции
+                        <select name="type">
+                            <option value="expense">Расход</option>
+                            <option value="income">Доход</option>
+                        </select>
+                    </label>
+                    <label class="field-label">Категория
+                        <select name="category">
+                            <option>Продукты</option>
+                            <option>Покупки</option>
+                            <option>Транспорт</option>
+                            <option>Подписки</option>
+                            <option>Зарплата</option>
+                            <option>Развлечения</option>
+                            <option>Другое</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <label class="field-label">Сумма, ₽
+                        <input name="amount" type="number" min="1" step="0.01" required placeholder="0">
+                    </label>
+                    <label class="field-label">Дата
+                        <input name="date" type="date" id="transactionDate" required>
+                    </label>
+                </div>
+
+                <label class="field-label">Статус
+                    <select name="status">
+                        <option value="completed">Выполнено</option>
+                        <option value="pending">В обработке</option>
+                    </select>
+                </label>
+
+                <p class="form-error" id="formError" role="alert"></p>
+                <div class="modal-actions">
+                    <button class="secondary-button" type="button" id="cancelModalButton">Отмена</button>
+                    <button class="primary-button" type="submit">Сохранить операцию</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>
